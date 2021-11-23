@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.service.ServiceEmployee;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,27 +16,18 @@ import java.util.List;
 @RequestMapping("/employees")
 public class HomeController {
 
+    private ServiceEmployee serviceEmployee;
 
-    List<Employee> list;
-
-    @PostConstruct
-    public void loadData() {
-
-        Employee employee1 = new Employee(1, "Rafael", "Pérez", "alberto98214@gmail.com");
-        Employee employee2 = new Employee(1, "Ashley", "Rodriguez", "ashley9414@gmail.com");
-        Employee employee3 = new Employee(1, "Jose", "Juarez", "juarez4414@gmail.com");
-
-        list = new ArrayList<>();
-
-        list.add(employee1);
-        list.add(employee2);
-        list.add(employee3);
-
-
+    @Autowired
+    public HomeController(ServiceEmployee serviceEmployee){
+        this.serviceEmployee = serviceEmployee;
     }
+
 
     @GetMapping("/list")
     public String getEmployees(Model model) {
+
+        List<Employee> list = serviceEmployee.getEmployees();
 
         model.addAttribute("employees", list);
         return "list-employees";
