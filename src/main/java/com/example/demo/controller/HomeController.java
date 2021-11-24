@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.service.ServiceEmployee;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,8 +28,34 @@ public class HomeController {
         List<Employee> list = serviceEmployee.getEmployees();
 
         model.addAttribute("employees", list);
-        return "list-employees";
+        return "employee/list-employees";
     }
 
+    @GetMapping("/showFormAdd")
+    public String showFormAdd(Model model){
+
+        Employee employee = new Employee();
+
+        model.addAttribute("employee", employee);
+
+        return "employee/employee-form";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("employee") Employee employee){
+
+        serviceEmployee.save(employee);
+        return "redirect:/employees/list";
+    }
+
+    @GetMapping("/showFormUpdate")
+    public String showFormUpdate(@RequestParam("employeeId") int id, Model model){
+
+        Employee employee = serviceEmployee.getEmploye(id);
+
+        model.addAttribute("employee", employee);
+
+        return "employee/employee-form";
+    }
 
 }
