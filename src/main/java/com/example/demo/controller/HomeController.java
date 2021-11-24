@@ -58,4 +58,11 @@ public class HomeController {
         return "employee/employee-form";
     }
 
+    @GetMapping("/delete")
+    public String delete(@RequestParam("employeeId") int id){
+        serviceEmployee.delete(id);
+
+        return "redirect:/employees/list";
+    }
+
 }
